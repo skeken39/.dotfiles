@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Trigger a scan
+iwctl device wlan0 set-property Powered on
+iwctl station wlan0 scan
+
+# Wait
+sleep 2
+
+# List networks
+iwctl station wlan0 get-networks
+
+# Connect to your network
+iwctl station wlan0 connect "POCO X6 5G"
+
+echo "Connection command sent."
