@@ -1,19 +1,19 @@
 #!/bin/bash
 
-# Your Earphones MAC Address
 MAC="98:47:44:BC:A2:61"
 
-# 1. Ensure the Bluetooth controller is powered on
 bluetoothctl power on
+sleep 2
 
-# 2. Wait a second for the hardware to initialize
+bluetoothctl trust $MAC
 sleep 1
 
-# 3. Attempt to connect
+bluetoothctl disconnect $MAC
+sleep 2
+
 echo "Connecting to $MAC..."
 bluetoothctl connect $MAC
 
-# 4. Optional: Send a notification to your desktop
 if [ $? -eq 0 ]; then
     notify-send "Bluetooth" "Earphones Connected Successfully" -i bluetooth
 else

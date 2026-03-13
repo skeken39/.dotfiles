@@ -4,11 +4,10 @@ export PATH=$PATH:/usr/bin:/bin:/home/skeken/.local/bin
 export XDG_RUNTIME_DIR=/run/user/1000
 
 DIR="/home/skeken/.config/hypr/Wallpaper"
-MONITOR="eDP-1"
 
-# 1. Rofi Interface (Horizontal Grid Layout)
+# 1. Rofi Interface (Now looking for .gif too!)
 CHOICE=$(
-    for file in "$DIR"/*.{jpg,jpeg,png,webp}; do
+    for file in "$DIR"/*.{jpg,jpeg,png,webp,gif}; do
         [ -f "$file" ] || continue
         name=$(basename "$file")
         echo -en "${name}\0icon\x1f${file}\n"
@@ -20,22 +19,23 @@ CHOICE=$(
         -theme-str 'element-text { horizontal-align: 0.5; font: "Sans 12"; }'
 )
 
-# Exit if Esc is pressed
 [ -z "$CHOICE" ] && exit 1
 
-# 2. Clean Path (Keep this safe!)
+# 2. Clean Path
 CLEAN_CHOICE=$(echo "$CHOICE" | sed 's/[[:cntrl:]]//g')
 FULL_PATH="$DIR/$CLEAN_CHOICE"
 
-# 3. Apply Wallpaper
-hyprctl hyprpaper unload all
-hyprctl hyprpaper preload "$FULL_PATH"
-hyprctl hyprpaper wallpaper "$MONITOR,$FULL_PATH"
+# 3. Ensure swww daemon is running quietly
+swww query >/dev/null 2>&1 || swww-daemon >/dev/null 2>&1 &
+sleep 0.1
 
-# 4. Generate Colors
+# 4. Apply Wallpaper with a cool expanding circle transition (silenced)
+swww img "$FULL_PATH" --transition-type center --transition-duration 1 --transition-fps 60 >/dev/null 2>&1
+
+# 5. Generate Colors
 wal -i "$FULL_PATH" -n -q -e --backend colorthief
 
-# 5. Reload Apps
+# 6. Reload Apps
 sleep 0.3
 pkill -USR1 kitty
 pywalfox update 2>/dev/null

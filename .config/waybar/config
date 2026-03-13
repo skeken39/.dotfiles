@@ -2,7 +2,7 @@
         "layer": "top",
         "position": "top",
         "reload_style_on_change": true,
-        "modules-left": ["clock","tray"],
+        "modules-left": ["clock","pulseaudio","tray"],
         "modules-center": ["hyprland/workspaces"],
         "modules-right": ["group/expand","bluetooth","battery"],
 
@@ -79,6 +79,19 @@
             "󰁹"
             ],
         },
+
+"pulseaudio": {
+    "format": "{volume}% {icon}",
+    "format-bluetooth": "{icon}% {volume}",
+    "format-muted": "",
+    "format-icons": {
+        "headphone": "",
+        "hands-free": "󰋎 ",
+        "headset": "󰋎 ",
+        "default": ["󰕿", "󰖀", "󰕾"]
+    },
+},
+
         "custom/pacman": {
             "format": "󰅢 {}",
             "interval": 30,   
